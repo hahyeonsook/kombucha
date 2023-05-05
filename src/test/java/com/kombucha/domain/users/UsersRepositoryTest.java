@@ -1,4 +1,4 @@
-package com.kombucha.kombucha.domain.users;
+package com.kombucha.domain.users;
 
 import com.kombucha.domain.users.Users;
 import com.kombucha.domain.users.UsersRepository;

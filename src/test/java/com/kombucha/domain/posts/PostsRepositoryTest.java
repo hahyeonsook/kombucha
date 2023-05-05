@@ -1,4 +1,4 @@
-package com.kombucha.kombucha.domain.posts;
+package com.kombucha.domain.posts;
 
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.domain.posts.PostsRepository;
