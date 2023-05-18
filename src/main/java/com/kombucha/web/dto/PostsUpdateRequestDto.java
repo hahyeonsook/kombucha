@@ -17,7 +17,7 @@ public class PostsUpdateRequestDto {
     private String content;
 
     @Builder
-    public PostsUpdateRequestDto(Long id, String title, String content) {
+    private PostsUpdateRequestDto(Long id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = content;

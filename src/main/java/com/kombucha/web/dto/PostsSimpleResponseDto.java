@@ -12,7 +12,7 @@ public class PostsSimpleResponseDto {
     private String title;
 
     @Builder
-    public PostsSimpleResponseDto(Posts entity) {
+    private PostsSimpleResponseDto(Posts entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
     }

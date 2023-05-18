@@ -13,7 +13,7 @@ public class PostsResponseDto {
     private String content;
 
     @Builder
-    public PostsResponseDto(Posts entity) {
+    private PostsResponseDto(Posts entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
