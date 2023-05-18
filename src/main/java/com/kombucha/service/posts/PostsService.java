@@ -23,6 +23,7 @@ public class PostsService {
         return postsRepository.save(postsSaveRequestDto.toEntity()).getId();
     }
 
+    @Transactional
     public Long update(Long id, PostsUpdateRequestDto postsUpdateRequestDto) {
         Posts posts = postsRepository.findById(id).orElseThrow(()->new IllegalArgumentException("수정할 수 없는 게시글입니다."));
         posts.update(postsUpdateRequestDto.getTitle(), postsUpdateRequestDto.getContent());
