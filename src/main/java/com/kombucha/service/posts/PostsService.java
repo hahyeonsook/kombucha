@@ -1,5 +1,6 @@
 package com.kombucha.service.posts;
 
+import com.kombucha.common.exceptions.CommonException;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.domain.posts.PostsRepository;
 import com.kombucha.web.dto.PostsResponseDto;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.kombucha.common.StatusCode.PAGE_NOT_FOUND;
+
 @RequiredArgsConstructor
 @Service
 public class PostsService {
@@ -25,7 +28,8 @@ public class PostsService {
 
     @Transactional
     public Long update(Long id, PostsUpdateRequestDto postsUpdateRequestDto) {
-        Posts posts = postsRepository.findById(id).orElseThrow(()->new IllegalArgumentException("수정할 수 없는 게시글입니다."));
+        Posts posts = postsRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
         posts.update(postsUpdateRequestDto.getTitle(), postsUpdateRequestDto.getContent());
         return id;
     }
@@ -40,12 +44,14 @@ public class PostsService {
     }
 
     public PostsResponseDto findById(Long id) {
-        Posts entity = postsRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
+        Posts entity = postsRepository.findById(id)
+                .orElseThrow(()->new CommonException(PAGE_NOT_FOUND));
         return PostsResponseDto.builder().entity(entity).build();
     }
 
     public void deleteById(Long id) {
-        Posts entity = postsRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
+        Posts entity = postsRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
         entity.delete();
     }
 }
