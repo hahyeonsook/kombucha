@@ -16,17 +16,16 @@ import java.util.stream.Collectors;
 
 import static com.kombucha.common.StatusCode.PAGE_NOT_FOUND;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class PostsService {
     private final PostsRepository postsRepository;
 
-    @Transactional
     public Long save(PostsSaveRequestDto postsSaveRequestDto) {
         return postsRepository.save(postsSaveRequestDto.toEntity()).getId();
     }
 
-    @Transactional
     public Long update(Long id, PostsUpdateRequestDto postsUpdateRequestDto) {
         Posts posts = postsRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
@@ -49,7 +48,6 @@ public class PostsService {
         return PostsResponseDto.builder().entity(entity).build();
     }
 
-    @Transactional
     public void deleteById(Long id) {
         Posts entity = postsRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
