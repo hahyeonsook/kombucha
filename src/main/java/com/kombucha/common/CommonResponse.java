@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class CommonResponse {
     private final LocalDateTime timestamp = LocalDateTime.now();
     private final int status;
-    private final String code;
+    private final int code;
     private final String message;
     private Object data;
 
@@ -22,7 +22,7 @@ public class CommonResponse {
                 .status(statusCode.value())
                 .body(CommonResponse.builder()
                         .status(statusCode.value())
-                        .code(statusCode.name())
+                        .code(statusCode.value())
                         .message(statusCode.getReasonPhrase())
                         .data(data)
                         .build());
@@ -32,7 +32,7 @@ public class CommonResponse {
                 .status(statusCode.getStatus().value())
                 .body(CommonResponse.builder()
                         .status(statusCode.getStatus().value())
-                        .code(statusCode.name())
+                        .code(statusCode.getStatus().value())
                         .message(statusCode.getMessage())
                         .data(data)
                         .build());
