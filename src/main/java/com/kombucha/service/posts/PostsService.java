@@ -52,6 +52,6 @@ public class PostsService {
     public void deleteById(Long id) {
         Posts entity = postsRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
-        entity.delete();
+        postsRepository.delete(entity);
     }
 }
