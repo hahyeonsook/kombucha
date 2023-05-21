@@ -49,6 +49,7 @@ public class PostsService {
         return PostsResponseDto.builder().entity(entity).build();
     }
 
+    @Transactional
     public void deleteById(Long id) {
         Posts entity = postsRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
