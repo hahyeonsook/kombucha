@@ -1,4 +1,4 @@
-package com.kombucha.kombucha;
+package com.kombucha;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
