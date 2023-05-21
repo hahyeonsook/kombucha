@@ -1,9 +1,8 @@
-package com.kombucha.kombucha.web;
+package com.kombucha.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.service.posts.PostsService;
-import com.kombucha.web.PostsApiController;
 import com.kombucha.web.dto.PostsResponseDto;
 import com.kombucha.web.dto.PostsSaveRequestDto;
 import com.kombucha.web.dto.PostsSimpleResponseDto;
@@ -37,14 +36,11 @@ public class PostsApiControllerTest {
 
     @Test
     public void PostsAPI_로_모든_게시글을_조회한다() throws Exception {
-        // Q. 준석님 여기서 테스트를 위해서 id 값을 builder에 추가하기는 했는데, 이게 맞는 형태인지 모르겠어요.
-        //    id 값을 다른 방식으로 return 해주도록 할 수 없을까요?
         // given
         String postTitle = "게시글 제목1";
         String postContent = "게시글 내용1";
         String postAuthor = "관리자";
 
-        // Q. 데이터가 2중 어레이야... 왜...?
         given(postsService.findAll())
                 .willReturn(
                         Arrays.asList(PostsSimpleResponseDto.builder()
