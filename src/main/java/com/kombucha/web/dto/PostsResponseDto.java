@@ -3,14 +3,12 @@ package com.kombucha.web.dto;
 import com.kombucha.domain.posts.Posts;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class PostsResponseDto {
-    private Long id;
-    private String title;
-    private String content;
+    private final Long id;
+    private final String title;
+    private final String content;
 
     @Builder
     private PostsResponseDto(Posts entity) {
