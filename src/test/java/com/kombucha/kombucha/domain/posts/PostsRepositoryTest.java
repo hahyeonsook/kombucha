@@ -1,5 +1,6 @@
 package com.kombucha.kombucha.domain.posts;
 
+import com.kombucha.common.config.WebConfig;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.domain.posts.PostsRepository;
 import org.junit.jupiter.api.Test;
@@ -8,19 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@Import(WebConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class PostsRepositoryTest {
 
     @Autowired
     private PostsRepository postsRepository;
-    @Autowired
-    private TestEntityManager testEntityManager;
 
     @Test
     public void 게시글_저장하고_불러온다() {
@@ -28,6 +32,7 @@ public class PostsRepositoryTest {
         String title = "게시글 제목";
         String content = "게시글 내용";
         String author = "관리자";
+        LocalDateTime now = LocalDateTime.now();
 
         Posts post = Posts.builder()
                 .title(title)
@@ -36,13 +41,12 @@ public class PostsRepositoryTest {
                 .build();
 
         // when
-        testEntityManager.persist(post);
+        Posts saved = postsRepository.save(post);
 
         // then
-        Posts saved = testEntityManager.find(Posts.class, post.getId());
-
-        assertThat(post.getTitle()).isEqualTo(saved.getTitle());
-        assertThat(post.getContent()).isEqualTo(saved.getContent());
+        assertThat(saved.getCreated()).isAfter(now);
+        assertThat(saved.getTitle()).isEqualTo(title);
+        assertThat(saved.getContent()).isEqualTo(content);
     }
 
     @Test
@@ -58,7 +62,6 @@ public class PostsRepositoryTest {
                 .author(author)
                 .build();
         postsRepository.save(post1);
-        testEntityManager.persist(post1);
 
         Posts post2 = Posts.builder()
                 .title(title + "2")
@@ -66,7 +69,6 @@ public class PostsRepositoryTest {
                 .author(author)
                 .build();
         postsRepository.save(post2);
-        testEntityManager.persist(post2);
 
         //when
         postsRepository.deleteAll();
