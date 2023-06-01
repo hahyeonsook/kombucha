@@ -3,10 +3,7 @@ package com.kombucha.service.posts;
 import com.kombucha.common.exceptions.CommonException;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.domain.posts.PostsRepository;
-import com.kombucha.web.dto.PostsResponseDto;
-import com.kombucha.web.dto.PostsSaveRequestDto;
-import com.kombucha.web.dto.PostsSimpleResponseDto;
-import com.kombucha.web.dto.PostsUpdateRequestDto;
+import com.kombucha.web.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,15 +19,18 @@ import static com.kombucha.common.StatusCode.PAGE_NOT_FOUND;
 public class PostsService {
     private final PostsRepository postsRepository;
 
-    public Long save(PostsSaveRequestDto postsSaveRequestDto) {
-        return postsRepository.save(postsSaveRequestDto.toEntity()).getId();
+    public PostsMinimalResponseDto save(PostsSaveRequestDto postsSaveRequestDto) {
+        Long postId = postsRepository.save(postsSaveRequestDto.toEntity()).getId();
+        return PostsMinimalResponseDto.builder().postId(postId).build();
     }
 
-    public Long update(Long id, PostsUpdateRequestDto postsUpdateRequestDto) {
+    public PostsMinimalResponseDto update(Long id, PostsUpdateRequestDto postsUpdateRequestDto) {
         Posts posts = postsRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
         posts.update(postsUpdateRequestDto.getTitle(), postsUpdateRequestDto.getContent());
-        return id;
+
+        Long postId = posts.getId();
+        return PostsMinimalResponseDto.builder().postId(postId).build();
     }
 
     public List<PostsSimpleResponseDto> findAll() {

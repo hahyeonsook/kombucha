@@ -2,10 +2,7 @@ package com.kombucha.web;
 
 import com.kombucha.common.CommonResponse;
 import com.kombucha.service.posts.PostsService;
-import com.kombucha.web.dto.PostsResponseDto;
-import com.kombucha.web.dto.PostsSaveRequestDto;
-import com.kombucha.web.dto.PostsSimpleResponseDto;
-import com.kombucha.web.dto.PostsUpdateRequestDto;
+import com.kombucha.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,14 +18,14 @@ public class PostsApiController {
 
     @PostMapping("/api/v1/posts")
     public ResponseEntity<CommonResponse> save(@Valid @RequestBody PostsSaveRequestDto postsSaveRequestDto) {
-        postsService.save(postsSaveRequestDto);
-        return CommonResponse.toResponseEntity(HttpStatus.OK);
+        PostsMinimalResponseDto post = postsService.save(postsSaveRequestDto);
+        return CommonResponse.toResponseEntity(HttpStatus.OK, post);
     }
 
     @PutMapping("/api/v1/posts/{id}")
     public ResponseEntity<CommonResponse> update(@PathVariable Long id, @Valid @RequestBody PostsUpdateRequestDto postsUpdateRequestDto) {
-        postsService.update(id, postsUpdateRequestDto);
-        return CommonResponse.toResponseEntity(HttpStatus.OK);
+        PostsMinimalResponseDto post = postsService.update(id, postsUpdateRequestDto);
+        return CommonResponse.toResponseEntity(HttpStatus.OK, post);
     }
 
     @GetMapping("/api/v1/posts")

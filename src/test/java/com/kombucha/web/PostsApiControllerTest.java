@@ -3,6 +3,7 @@ package com.kombucha.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.service.posts.PostsService;
+import com.kombucha.web.dto.PostsMinimalResponseDto;
 import com.kombucha.web.dto.PostsResponseDto;
 import com.kombucha.web.dto.PostsSaveRequestDto;
 import com.kombucha.web.dto.PostsSimpleResponseDto;
@@ -92,6 +93,8 @@ public class PostsApiControllerTest {
         // then
         resultActions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.title").value(postTitle))
+                .andExpect(jsonPath("$.data.content").value(postContent))
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.message").value(HttpStatus.OK.name()));
     }
@@ -103,13 +106,19 @@ public class PostsApiControllerTest {
         String postContent = "게시글 내용1";
         String postAuthor = "관리자";
 
-        String content = objectMapper.writeValueAsString(PostsSaveRequestDto.builder()
+        PostsSaveRequestDto postsSaveRequestDto = PostsSaveRequestDto.builder()
                 .title(postTitle)
                 .content(postContent)
                 .author(postAuthor)
-                .build());
+                .build();
+
+        given(postsService.save(postsSaveRequestDto)).willReturn(
+                PostsMinimalResponseDto.builder().postId(1L)
+                        .build());
 
         // when
+        String content = objectMapper.writeValueAsString(postsSaveRequestDto);
+
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/v1/posts")
                         .content(content)
