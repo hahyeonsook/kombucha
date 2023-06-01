@@ -1,6 +1,6 @@
 package com.kombucha.domain.posts;
 
-import com.kombucha.domain.BaseTimeEntity;
+import com.kombucha.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

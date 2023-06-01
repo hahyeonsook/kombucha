@@ -1,4 +1,4 @@
-package com.kombucha.domain;
+package com.kombucha.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
