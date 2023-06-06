@@ -3,7 +3,6 @@ package com.kombucha.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.service.posts.PostsService;
-import com.kombucha.web.controller.PostsApiController;
 import com.kombucha.web.dto.posts.PostsMinimalResponseDto;
 import com.kombucha.web.dto.posts.PostsResponseDto;
 import com.kombucha.web.dto.posts.PostsSaveRequestDto;
