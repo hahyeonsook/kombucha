@@ -1,8 +1,8 @@
-package com.kombucha.web;
+package com.kombucha.web.controller;
 
 import com.kombucha.common.CommonResponse;
 import com.kombucha.service.posts.PostsService;
-import com.kombucha.web.dto.*;
+import com.kombucha.web.dto.posts.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

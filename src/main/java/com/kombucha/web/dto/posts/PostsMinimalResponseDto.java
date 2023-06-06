@@ -1,4 +1,4 @@
-package com.kombucha.web.dto;
+package com.kombucha.web.dto.posts;
 
 import com.kombucha.domain.posts.Posts;
 import lombok.Builder;

@@ -1,12 +1,13 @@
-package com.kombucha.web;
+package com.kombucha.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.service.posts.PostsService;
-import com.kombucha.web.dto.PostsMinimalResponseDto;
-import com.kombucha.web.dto.PostsResponseDto;
-import com.kombucha.web.dto.PostsSaveRequestDto;
-import com.kombucha.web.dto.PostsSimpleResponseDto;
+import com.kombucha.web.controller.PostsApiController;
+import com.kombucha.web.dto.posts.PostsMinimalResponseDto;
+import com.kombucha.web.dto.posts.PostsResponseDto;
+import com.kombucha.web.dto.posts.PostsSaveRequestDto;
+import com.kombucha.web.dto.posts.PostsSimpleResponseDto;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

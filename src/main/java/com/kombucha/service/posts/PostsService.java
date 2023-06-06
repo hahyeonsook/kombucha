@@ -3,7 +3,7 @@ package com.kombucha.service.posts;
 import com.kombucha.common.exceptions.CommonException;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.domain.posts.PostsRepository;
-import com.kombucha.web.dto.*;
+import com.kombucha.web.dto.posts.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
