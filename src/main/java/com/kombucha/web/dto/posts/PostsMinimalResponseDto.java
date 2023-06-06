@@ -8,7 +8,7 @@ public class PostsMinimalResponseDto {
     private final Long id;
 
     @Builder
-    private PostsMinimalResponseDto(Long postId) {
-        this.id = postId;
+    private PostsMinimalResponseDto(Long id) {
+        this.id = id;
     }
 }

@@ -21,7 +21,7 @@ public class PostsService {
 
     public PostsMinimalResponseDto save(PostsSaveRequestDto postsSaveRequestDto) {
         Long postId = postsRepository.save(postsSaveRequestDto.toEntity()).getId();
-        return PostsMinimalResponseDto.builder().postId(postId).build();
+        return PostsMinimalResponseDto.builder().id(postId).build();
     }
 
     public PostsMinimalResponseDto update(Long id, PostsUpdateRequestDto postsUpdateRequestDto) {
@@ -30,7 +30,7 @@ public class PostsService {
         posts.update(postsUpdateRequestDto.getTitle(), postsUpdateRequestDto.getContent());
 
         Long postId = posts.getId();
-        return PostsMinimalResponseDto.builder().postId(postId).build();
+        return PostsMinimalResponseDto.builder().id(postId).build();
     }
 
     public List<PostsSimpleResponseDto> findAll() {
