@@ -1,6 +1,5 @@
 package com.kombucha.service.posts;
 
-import com.kombucha.common.exceptions.CommonException;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.domain.posts.PostsRepository;
 import com.kombucha.web.dto.posts.*;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.kombucha.common.StatusCode.PAGE_NOT_FOUND;
 
 @Service
 @Transactional
@@ -44,7 +41,7 @@ public class PostsService {
 
     public PostsResponseDto findById(Long id) {
         Posts entity = postsRepository.findById(id)
-                .orElseThrow(()->new CommonException(PAGE_NOT_FOUND));
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
         return PostsResponseDto.builder().entity(entity).build();
     }
 

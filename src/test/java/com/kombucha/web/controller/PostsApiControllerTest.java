@@ -113,7 +113,7 @@ public class PostsApiControllerTest {
                 .build();
 
         given(postsService.save(postsSaveRequestDto)).willReturn(
-                PostsMinimalResponseDto.builder().postId(1L)
+                PostsMinimalResponseDto.builder().id(1L)
                         .build());
 
         // when
