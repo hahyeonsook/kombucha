@@ -5,6 +5,9 @@ import com.kombucha.web.dto.users.UsersLoginRequestDto;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,13 +15,13 @@ import java.util.Map;
 
 public class JwtUtil {
     @Value("${auth.token}")
-    private static final String jwtSecretKey = "78zjtR5yoNurjhBgz1Oz30wy9sk5ufVtEsgf8WRdLak";
+    private static final String jwtSecretKey = "78zjtR5yoNurjhBgz1Oz30wy9sk5ufVtEsgf8WRdLakEsgf8WRdLak";
 
     public static String generateJwt(UsersCreateRequestDto usersCreateRequestDto) {
         return Jwts.builder()
                 .setHeader(createHeader())
                 .setClaims(createClaims(usersCreateRequestDto))
-                .signWith(SignatureAlgorithm.HS256, jwtSecretKey)
+                .signWith(createSignature())
                 .setExpiration(createExpiredDate())
                 .compact();
     }
@@ -27,7 +30,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setHeader(createHeader())
                 .setClaims(createClaims(usersLoginRequestDto))
-                .signWith(SignatureAlgorithm.HS256, jwtSecretKey)
+                .signWith(createSignature())
                 .setExpiration(createExpiredDate())
                 .compact();
     }
@@ -36,11 +39,7 @@ public class JwtUtil {
         try {
             Claims claims = getClaimsFormToken(token);
             return true;
-        } catch (ExpiredJwtException exception) {
-            return false;
-        } catch (JwtException exception) {
-            return false;
-        } catch (NullPointerException exception) {
+        } catch (JwtException | NullPointerException exception) {
             return false;
         }
     }
@@ -50,8 +49,13 @@ public class JwtUtil {
         return claims.get("email").toString();
     }
 
+    private static Key createSignature() {
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtSecretKey);
+        return new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
+    }
+
     private static Claims getClaimsFormToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecretKey)
+        return Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(jwtSecretKey))
                 .parseClaimsJws(token).getBody();
     }
 
