@@ -1,5 +1,6 @@
 package com.kombucha.common.exceptions;
 
+import com.kombucha.common.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,5 @@
-package com.kombucha.common.exceptions;
+package com.kombucha.common;
 
-import com.kombucha.common.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

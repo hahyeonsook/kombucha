@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class UsersApiController {
     private final UsersService usersService;
 
-    @PostMapping("api/v1/user")
+    @PostMapping("api/v1/user/signup")
     public ResponseEntity<CommonResponse> create(@Valid @RequestBody UsersCreateRequestDto usersCreateRequestDto) {
         return CommonResponse.toResponseEntity(HttpStatus.OK, usersService.create(usersCreateRequestDto));
     }
