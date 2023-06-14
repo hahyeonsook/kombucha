@@ -2,9 +2,7 @@ package com.kombucha.component.util;
 
 import com.kombucha.web.dto.users.UsersCreateRequestDto;
 import com.kombucha.web.dto.users.UsersLoginRequestDto;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Calendar;
@@ -38,7 +36,11 @@ public class JwtUtil {
         try {
             Claims claims = getClaimsFormToken(token);
             return true;
-        } catch (Exception exception) {
+        } catch (ExpiredJwtException exception) {
+            return false;
+        } catch (JwtException exception) {
+            return false;
+        } catch (NullPointerException exception) {
             return false;
         }
     }
