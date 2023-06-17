@@ -7,7 +7,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -16,13 +15,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         List<String> unauthApiList = Arrays.asList("/api/v1/user/login", "/api/v1/user/signup");
 
-        System.out.println("요청 path" + request.getRequestURI());
         if (unauthApiList.contains(request.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
@@ -42,7 +39,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception exception) {
-            System.out.println("exception" + exception);
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             PrintWriter printWriter = response.getWriter();
