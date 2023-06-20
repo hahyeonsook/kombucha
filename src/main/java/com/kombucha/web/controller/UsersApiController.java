@@ -26,6 +26,12 @@ public class UsersApiController {
         return CommonResponse.toResponseEntity(HttpStatus.OK, usersService.login(usersLoginRequestDto));
     }
 
+    @PostMapping("/api/v1/user/logout")
+    public ResponseEntity<CommonResponse> logout(UsersRequestDto usersRequestDto) {
+        usersService.logout(usersRequestDto);
+        return CommonResponse.toResponseEntity(HttpStatus.OK);
+    }
+
     @DeleteMapping("/api/v1/user")
     public ResponseEntity<CommonResponse> delete(UsersRequestDto usersRequestDto) {
         usersService.delete(usersRequestDto);

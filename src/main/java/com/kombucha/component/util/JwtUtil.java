@@ -1,7 +1,6 @@
 package com.kombucha.component.util;
 
-import com.kombucha.web.dto.users.UsersCreateRequestDto;
-import com.kombucha.web.dto.users.UsersLoginRequestDto;
+import com.kombucha.domain.users.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -20,19 +19,10 @@ public class JwtUtil {
     @Value("${auth.token}")
     private static final String jwtSecretKey = "78zjtR5yoNurjhBgz1Oz30wy9sk5ufVtEsgf8WRdLakEsgf8WRdLak";
 
-    public static String generateJwt(UsersCreateRequestDto usersCreateRequestDto) {
+    public static String generateJwt(Users user) {
         return Jwts.builder()
                 .setHeader(createHeader())
-                .setClaims(createClaims(usersCreateRequestDto))
-                .signWith(createSignature())
-                .setExpiration(createExpiredDate())
-                .compact();
-    }
-
-    public static String generateJwt(UsersLoginRequestDto usersLoginRequestDto) {
-        return Jwts.builder()
-                .setHeader(createHeader())
-                .setClaims(createClaims(usersLoginRequestDto))
+                .setClaims(createClaims(user))
                 .signWith(createSignature())
                 .setExpiration(createExpiredDate())
                 .compact();
@@ -63,7 +53,7 @@ public class JwtUtil {
     }
 
     public static String getTokenFromHeader(String header) {
-        return header.split(" ")[1];
+        return header.substring(7);
     }
 
     private static Map<String, Object> createHeader() {
@@ -75,17 +65,10 @@ public class JwtUtil {
         return header;
     }
 
-    private static Map<String, Object> createClaims(UsersCreateRequestDto usersCreateRequestDto) {
+    private static Map<String, Object> createClaims(Users user) {
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("email", usersCreateRequestDto.getEmail());
-        return claims;
-    }
-
-    private static Map<String, Object> createClaims(UsersLoginRequestDto usersLoginRequestDto) {
-        Map<String, Object> claims = new HashMap<>();
-
-        claims.put("email", usersLoginRequestDto.getEmail());
+        claims.put("email", user.getEmail());
         return claims;
     }
 
