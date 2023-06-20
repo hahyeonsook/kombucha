@@ -13,32 +13,33 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/v1/user")
 public class UsersApiController {
     private final UsersService usersService;
 
-    @PostMapping("api/v1/user/signup")
+    @PostMapping("/signup")
     public ResponseEntity<CommonResponse> create(@Valid @RequestBody UsersCreateRequestDto usersCreateRequestDto) {
         return CommonResponse.toResponseEntity(HttpStatus.OK, usersService.create(usersCreateRequestDto));
     }
 
-    @PostMapping("/api/v1/user/login")
+    @PostMapping("/login")
     public ResponseEntity<CommonResponse> login(@Valid @RequestBody UsersLoginRequestDto usersLoginRequestDto) {
         return CommonResponse.toResponseEntity(HttpStatus.OK, usersService.login(usersLoginRequestDto));
     }
 
-    @PostMapping("/api/v1/user/logout")
+    @PostMapping("/logout")
     public ResponseEntity<CommonResponse> logout(UsersRequestDto usersRequestDto) {
         usersService.logout(usersRequestDto);
         return CommonResponse.toResponseEntity(HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/v1/user")
+    @DeleteMapping("/")
     public ResponseEntity<CommonResponse> delete(UsersRequestDto usersRequestDto) {
         usersService.delete(usersRequestDto);
         return CommonResponse.toResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/api/v1/user")
+    @GetMapping("/")
     public ResponseEntity<CommonResponse> getProfile(UsersRequestDto usersRequestDto) {
         return CommonResponse.toResponseEntity(HttpStatus.OK, usersService.getProfile(usersRequestDto));
     }

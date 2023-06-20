@@ -43,10 +43,7 @@ public class UsersService {
     }
 
     public UsersResponseDto getProfile(UsersRequestDto usersRequestDto) {
-        Users user = usersRepository.findByEmail(usersRequestDto.getEmail());
-        if (user == null) {
-            throw new AuthenticationException(401, "올바르지 않은 사용자입니다.");
-        }
+        Users user = usersRepository.findByEmailIsNotNull(usersRequestDto.getEmail());
         return UsersResponseDto.builder()
                 .email(user.getEmail())
                 .name(user.getName())
@@ -56,10 +53,7 @@ public class UsersService {
     }
 
     public boolean authenticate(String email, String password) {
-        Users user = usersRepository.findByEmail(email);
-        if (user == null) {
-            throw new AuthenticationException(401, "올바르지 않은 사용자입니다.");
-        }
+        Users user = usersRepository.findByEmailIsNotNull(email);
         return email.equals(user.getEmail()) && password.equals(user.getPassword());
     }
 
@@ -68,12 +62,12 @@ public class UsersService {
     }
 
     private void expireJwt(String email) {
-        JwtToken jwtToken = jwtTokenRepository.findJwtTokenByUserAndExpiredFalse(usersRepository.findByEmail(email));
+        JwtToken jwtToken = jwtTokenRepository.findJwtTokenByUserAndExpiredFalse(usersRepository.findByEmailIsNotNull(email));
         jwtToken.expireToken();
     }
 
     private String generateJwt(String email) {
-        Users user = usersRepository.findByEmail(email);
+        Users user = usersRepository.findByEmailIsNotNull(email);
 
         List<JwtToken> jwtTokens = jwtTokenRepository.findAllByUserAndExpiredFalse(user);
         for (JwtToken jwtToken: jwtTokens) {
