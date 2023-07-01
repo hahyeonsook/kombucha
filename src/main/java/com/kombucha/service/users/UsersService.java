@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -19,6 +20,8 @@ import java.util.List;
 public class UsersService {
     private final UsersRepository usersRepository;
     private final JwtTokenRepository jwtTokenRepository;
+
+    private final JwtUtil jwtUtil;
 
     public UsersMinimalResponseDto create(UsersCreateRequestDto usersCreateRequestDto) {
         usersRepository.save(usersCreateRequestDto.toEntity());
@@ -43,7 +46,7 @@ public class UsersService {
     }
 
     public UsersResponseDto getProfile(UsersRequestDto usersRequestDto) {
-        Users user = usersRepository.findByEmailIsNotNull(usersRequestDto.getEmail());
+        Users user = usersRepository.findByEmail(usersRequestDto.getEmail()).orElseThrow(()->new IllegalArgumentException("존재하지 않는 사용자입니다."));
         return UsersResponseDto.builder()
                 .email(user.getEmail())
                 .name(user.getName())
@@ -53,7 +56,7 @@ public class UsersService {
     }
 
     public boolean authenticate(String email, String password) {
-        Users user = usersRepository.findByEmailIsNotNull(email);
+        Users user = usersRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("존재하지 않는 사용자입니다."));
         return email.equals(user.getEmail()) && password.equals(user.getPassword());
     }
 
@@ -62,19 +65,19 @@ public class UsersService {
     }
 
     private void expireJwt(String email) {
-        JwtToken jwtToken = jwtTokenRepository.findJwtTokenByUserAndExpiredFalse(usersRepository.findByEmailIsNotNull(email));
+        JwtToken jwtToken = jwtTokenRepository.findJwtTokenByUserAndExpiredFalse(usersRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("존재하지 않는 사용자입니다.")));
         jwtToken.expireToken();
     }
 
     private String generateJwt(String email) {
-        Users user = usersRepository.findByEmailIsNotNull(email);
+        Users user = usersRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
         List<JwtToken> jwtTokens = jwtTokenRepository.findAllByUserAndExpiredFalse(user);
         for (JwtToken jwtToken: jwtTokens) {
             jwtToken.expireToken();
         }
 
-        JwtToken jwtToken = JwtToken.builder().token(JwtUtil.generateJwt(user)).user(user).build();
+        JwtToken jwtToken = JwtToken.builder().token(jwtUtil.generateJwt(user)).user(user).build();
         jwtTokenRepository.save(jwtToken);
         return jwtToken.getToken();
     }
