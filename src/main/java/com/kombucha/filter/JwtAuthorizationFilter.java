@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -20,10 +21,12 @@ import java.util.List;
 
 import static com.kombucha.common.constants.AuthConstants.TOKEN_TYPE;
 
+@Component
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final UsersService usersService;
+    private final JwtUtil jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         List<String> unauthApiList = Arrays.asList("/api/v1/user/login", "/api/v1/user/signup");
@@ -38,13 +41,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             if (header == null || !header.startsWith(TOKEN_TYPE)) {
                 throw new Exception("올바르지 않은 토큰입니다.");
             }
-            String token = JwtUtil.getTokenFromHeader(header);
+            String token = jwtUtil.getTokenFromHeader(header);
             JwtToken jwtToken = usersService.findByTokenExpiredFalse(token);
-            if (jwtToken == null || !token.equals(jwtToken.getToken()) || !JwtUtil.isValidToken(token)) {
+            if (jwtToken == null || !token.equals(jwtToken.getToken()) || !jwtUtil.isValidToken(token)) {
                 throw new Exception("올바르지 않은 토큰입니다.");
             }
 
-            String email = JwtUtil.getEmailFromToken(token);
+            String email = jwtUtil.getEmailFromToken(token);
             if (email == null || email.equalsIgnoreCase("")) {
                 throw new Exception("올바르지 않은 토큰입니다.");
             }
