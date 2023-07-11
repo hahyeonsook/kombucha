@@ -1,9 +1,10 @@
 package com.kombucha.service.posts;
 
-import com.kombucha.common.exceptions.CommonException;
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.domain.posts.PostsRepository;
-import com.kombucha.web.dto.*;
+import com.kombucha.domain.users.Users;
+import com.kombucha.domain.users.UsersRepository;
+import com.kombucha.web.dto.posts.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,17 +12,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.kombucha.common.StatusCode.PAGE_NOT_FOUND;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class PostsService {
+    private final UsersRepository usersRepository;
     private final PostsRepository postsRepository;
 
     public PostsMinimalResponseDto save(PostsSaveRequestDto postsSaveRequestDto) {
-        Long postId = postsRepository.save(postsSaveRequestDto.toEntity()).getId();
-        return PostsMinimalResponseDto.builder().postId(postId).build();
+        Users author = usersRepository.findByEmail(postsSaveRequestDto.getEmail())
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Long postId = postsRepository.save(postsSaveRequestDto.toEntity(author)).getId();
+        return PostsMinimalResponseDto.builder().id(postId).build();
     }
 
     public PostsMinimalResponseDto update(Long id, PostsUpdateRequestDto postsUpdateRequestDto) {
@@ -30,7 +32,7 @@ public class PostsService {
         posts.update(postsUpdateRequestDto.getTitle(), postsUpdateRequestDto.getContent());
 
         Long postId = posts.getId();
-        return PostsMinimalResponseDto.builder().postId(postId).build();
+        return PostsMinimalResponseDto.builder().id(postId).build();
     }
 
     public List<PostsSimpleResponseDto> findAll() {
@@ -44,7 +46,7 @@ public class PostsService {
 
     public PostsResponseDto findById(Long id) {
         Posts entity = postsRepository.findById(id)
-                .orElseThrow(()->new CommonException(PAGE_NOT_FOUND));
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 게시글입니다."));
         return PostsResponseDto.builder().entity(entity).build();
     }
 

@@ -1,6 +1,5 @@
-package com.kombucha.common.exceptions;
+package com.kombucha.common;
 
-import com.kombucha.common.StatusCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -28,12 +27,12 @@ public class ErrorResponse {
                         .build());
     }
 
-    public static ResponseEntity<ErrorResponse> toResponseEntity(StatusCode errorCode) {
+    public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
         return ResponseEntity
                 .status(errorCode.getStatus())
                 .body(ErrorResponse.builder()
-                        .status(errorCode.getStatus().value())
-                        .error(errorCode.getStatus().name())
+                        .status(errorCode.getStatus())
+                        .error(errorCode.getMessage())
                         .code(errorCode.name())
                         .message(errorCode.getMessage())
                         .build());

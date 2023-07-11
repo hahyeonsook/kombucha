@@ -36,22 +36,22 @@ public class CommonResponse {
                         .data(data)
                         .build());
     }
-    public static ResponseEntity<CommonResponse> toResponseEntity(StatusCode statusCode) {
+    public static ResponseEntity<CommonResponse> toResponseEntity(ErrorCode errorCode) {
         return ResponseEntity
-                .status(statusCode.getStatus().value())
+                .status(errorCode.getStatus())
                 .body(CommonResponse.builder()
-                        .status(statusCode.getStatus().value())
-                        .code(statusCode.getStatus().value())
-                        .message(statusCode.getMessage())
+                        .status(errorCode.getStatus())
+                        .code(errorCode.getStatus())
+                        .message(errorCode.getMessage())
                         .build());
     }
-    public static ResponseEntity<CommonResponse> toResponseEntity(StatusCode statusCode, Object data) {
+    public static ResponseEntity<CommonResponse> toResponseEntity(ErrorCode errorCode, Object data) {
         return ResponseEntity
-                .status(statusCode.getStatus().value())
+                .status(errorCode.getStatus())
                 .body(CommonResponse.builder()
-                        .status(statusCode.getStatus().value())
-                        .code(statusCode.getStatus().value())
-                        .message(statusCode.getMessage())
+                        .status(errorCode.getStatus())
+                        .code(errorCode.getStatus())
+                        .message(errorCode.getMessage())
                         .data(data)
                         .build());
     }

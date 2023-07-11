@@ -1,4 +1,4 @@
-package com.kombucha.web.dto;
+package com.kombucha.web.dto.posts;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
