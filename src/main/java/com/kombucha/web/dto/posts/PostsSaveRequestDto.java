@@ -1,6 +1,7 @@
 package com.kombucha.web.dto.posts;
 
 import com.kombucha.domain.posts.Posts;
+import com.kombucha.domain.users.Users;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -15,16 +16,17 @@ public class PostsSaveRequestDto {
     private String title;
     @NotBlank(message = "게시글 내용을 입력하세요.")
     private String content;
-    private String author;
+    @NotBlank(message = "게시글 작성자의 이메일을 입력하세요.")
+    private String email;
 
     @Builder
-    private PostsSaveRequestDto(String title, String content, String author) {
+    private PostsSaveRequestDto(String title, String content, String email) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.email = email;
     }
 
-    public Posts toEntity() {
+    public Posts toEntity(Users author) {
         return Posts.builder()
                 .title(title)
                 .content(content)

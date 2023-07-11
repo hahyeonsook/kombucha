@@ -2,6 +2,8 @@ package com.kombucha.service.posts;
 
 import com.kombucha.domain.posts.Posts;
 import com.kombucha.domain.posts.PostsRepository;
+import com.kombucha.domain.users.Users;
+import com.kombucha.domain.users.UsersRepository;
 import com.kombucha.web.dto.posts.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +16,13 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class PostsService {
+    private final UsersRepository usersRepository;
     private final PostsRepository postsRepository;
 
     public PostsMinimalResponseDto save(PostsSaveRequestDto postsSaveRequestDto) {
-        Long postId = postsRepository.save(postsSaveRequestDto.toEntity()).getId();
+        Users author = usersRepository.findByEmail(postsSaveRequestDto.getEmail())
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 사용자입니다."));
+        Long postId = postsRepository.save(postsSaveRequestDto.toEntity(author)).getId();
         return PostsMinimalResponseDto.builder().id(postId).build();
     }
 
